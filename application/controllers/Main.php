@@ -25,6 +25,8 @@ class Main extends CI_Controller{
 		/*
 			Put post data in session and use it to determine if a checkbox is checked or not
 		*/
+
+		$this->session->set_userdata("player_name", $this->input->post("player_name"));
 		$this->session->set_userdata("checkbox_female", $this->input->post("female"));
 		$this->session->set_userdata("checkbox_male", $this->input->post("male"));
 		$this->session->set_userdata("checkbox_basketball", $this->input->post("basketball"));
@@ -56,28 +58,30 @@ class Main extends CI_Controller{
 		$players = array();
 
 		foreach($this->session->userdata("players") AS $player){
-			if(isset($filters["gender"]) AND !isset($filters["sport"])){
-				foreach($filters["gender"] AS $gender){
-					if($player["gender"] == $gender)
-						$players[] = $player;
-				}
-			}
-			else if(isset($filters["sport"]) AND !isset($filters["gender"])){
-				foreach($filters["sport"] AS $sport){
-					if($player["sport"] == $sport)
-						$players[] = $player;
-				}
-			}
-			else if(isset($filters["gender"]) AND isset($filters["sport"])){
-				foreach($filters["gender"] AS $gender){
-					foreach($filters["sport"] AS $sport){
-						if($player["gender"] == $gender AND $player["sport"] == $sport)
+			if(str_contains(strtolower($player["player_name"]), strtolower($this->input->post("player_name")))){
+				if(isset($filters["gender"]) AND !isset($filters["sport"])){
+					foreach($filters["gender"] AS $gender){
+						if($player["gender"] == $gender)
 							$players[] = $player;
 					}
 				}
+				else if(isset($filters["sport"]) AND !isset($filters["gender"])){
+					foreach($filters["sport"] AS $sport){
+						if($player["sport"] == $sport)
+							$players[] = $player;
+					}
+				}
+				else if(isset($filters["gender"]) AND isset($filters["sport"])){
+					foreach($filters["gender"] AS $gender){
+						foreach($filters["sport"] AS $sport){
+							if($player["gender"] == $gender AND $player["sport"] == $sport)
+								$players[] = $player;
+						}
+					}
+				}
+				else
+					$players[] = $player;
 			}
-			else
-				$players[] = $player;
 		}
 
 		if($players == NULL)

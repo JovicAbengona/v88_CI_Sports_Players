@@ -14,7 +14,7 @@
         -->
         <?php  $attributes = array("role" => "form"); echo form_open("searchPlayers", $attributes);  ?>
             <h3>Search Players</h3>
-            <input type="text" class="player_name" name="player_name" placeholder="Player Name">
+            <input type="text" class="player_name" name="player_name" value="<?php if($this->session->userdata("player_name") != NULL) echo $this->session->userdata("player_name"); ?>" placeholder="Player Name">
             <label><input type="checkbox" name="female" value="Female" <?php if($this->session->userdata("checkbox_female") != NULL) echo "checked"; ?>> Female</label>
             <label><input type="checkbox" name="male" value="Male" <?php if($this->session->userdata("checkbox_male") != NULL) echo "checked"; ?>> Male</label>
             <p>Sports</p>
